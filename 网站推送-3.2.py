@@ -1,14 +1,16 @@
-import requests
-from xmltodict import parse
-
 '''
 ## 版本：3.2
 ## 作者：玖伴一鹏
-## 日期：2022-3-9
+## 日期：2022-3-10
 ## 更新：添加了分类、插件内链、标签网址，压缩代码、以确定接口次数
 ## 说明：我的图片网址有两个字典，所以要额外重新遍历
-## 备注：两个插件生成的地图
+## 备注：神马引擎推送太快会拒绝，还需在函数内做try
+cron: 7 * * *
+new Env('网站推送');
 '''
+
+import requests
+from xmltodict import parse
 
 url = 'https://www.jiubanyipeng.ltd/'
 url_list = [url+'sitemap-1.xml',  url+'surl-sitemap.xml', url+'category-sitemap.xml', url+'post_tag-sitemap.xml']
