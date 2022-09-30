@@ -1,0 +1,11 @@
+{
+  "type": "service_account",
+  "project_id": "jiubanyipeng-20220129",
+  "private_key_id": "暂时不做",
+  "private_key": "暂时不做",
+  "client_id": "暂时不做",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "暂时不做"
+}
