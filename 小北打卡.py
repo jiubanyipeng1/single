@@ -6,7 +6,7 @@ import datetime
 
 
 # 定义运行时间，24小时制
-timeing = '7'  # 为了不浪费电脑性能，使用小时制，会运行两次，为了防止时间差导致没有运行
+timeing = '7' # 设置每天早上7点开始运行，每运行成功一次会延迟几秒运行，理论上：单个账号运行300次便延迟一分钟
 
 # 设置账号 密码
 array = [
@@ -123,30 +123,30 @@ def xiaobei_update(username, password):
 
 
 if __name__ == "__main__":
-    count = 0
-    failed = 0
+    count, failed = 0, 0
     failed_username = ""
     nowtime = datetime.datetime.now().strftime('%H')
     while True:
-        print(f'程序将在{timeing}点和{str(int(timeing)+1)}点运行')
+        print(f'您设置时间的运行时间为 {timeing}点 运行')
         if nowtime == timeing or timeing == str(int(nowtime)-1):
-            # 循环打卡列表
-            for i in array:
-                if xiaobei_update(i[0], i[1]) == False:
-                    failed = failed+1
-                    failed_username = failed_username+str(i[0])+",\n"
-                count = count+1
-                time.sleep(1)
+            while True:
+                # 循环打卡列表
+                for i in array:
+                    if xiaobei_update(i[0], i[1]) == False:
+                        failed = failed+1
+                        failed_username = failed_username+str(i[0])+",\n"
+                    count = count+1
+                    time.sleep(1)
 
-            if failed == 0:
-                title = "\n🎉恭喜您打卡成功啦！一共是"+str(count)+"人"
-            else:
-                title = "\n😥共操作"+str(count)+"人,失败"+str(failed)+"人"
-                message = "失败账号：\n"+failed_username
-            print(title)
-            count, failed = 0, 0
-            print('程序将在 ' + (datetime.datetime.now() + datetime.timedelta(days=1)).strftime(
-                "%Y-%m-%d ") + timeing + '点和' + str(int(timeing)+1) + '点继续运行\n\n')
+                if failed == 0:
+                    title = "\n🎉恭喜您打卡成功啦！一共是"+str(count)+"人"
+                else:
+                    title = "\n😥共操作"+str(count)+"人,失败"+str(failed)+"人"
+                    message = "失败账号：\n"+failed_username
+                print(title)
+                count, failed = 0, 0
+                print('程序将在 ' + (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S") + ' 继续运行\n\n')
+                time.sleep(60*60*24-1)   # 24小时的秒数，账号越多后面减的也应该越多，这是由于程序在运行过程中请求打卡网络的延迟问题造成
         else:
-            print('当前不在这个时间段，程序将不会运行')
+            print('当前不在运行时间段，程序将不会运行，一个小时后将再次运行')
         time.sleep(3600)
