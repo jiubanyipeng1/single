@@ -125,8 +125,8 @@ def xiaobei_update(username, password):
 if __name__ == "__main__":
     count, failed = 0, 0
     failed_username = ""
-    nowtime = datetime.datetime.now().strftime('%H')
     while True:
+         nowtime = datetime.datetime.now().strftime('%H')
         print(f'您设置时间的运行时间为 {timeing}点 运行')
         if nowtime == timeing or timeing == str(int(nowtime)-1):
             while True:
