@@ -128,9 +128,9 @@ if __name__ == "__main__":
     count, failed = 0, 0
     failed_username = ""
     while True:
-         nowtime = datetime.datetime.now().strftime('%H')
-        print(f'您设置时间的运行时间为 {timeing}点 运行')
-        if nowtime == timeing or timeing == str(int(nowtime)-1):
+        nowtime = datetime.datetime.now().strftime('%H')
+        print(f'当前时间{nowtime}点 您设置时间的运行时间为 {timeing}点 运行')
+        if int(nowtime) == int(timeing) or int(timeing) == int(nowtime)-1:
             while True:
                 # 循环打卡列表
                 for i in array:
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                     title = "\n😥共操作"+str(count)+"人,失败"+str(failed)+"人"
                     message = "失败账号：\n"+failed_username
                 print(title)
-                count, failed = 0, 0
+                count, failed, title, message, failed_username = 0, 0, '', '', ''    # 重置值
                 print('程序将在 ' + (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S") + ' 继续运行\n\n')
                 time.sleep(60*60*24-timesub)   # 24小时的秒数减去运行过程网络延迟的时间
         else:
