@@ -81,3 +81,6 @@ class prize(Basic):
 if __name__ == '__main__':
     prize = prize()
     prize.run()
+else:
+    prize = prize()
+    prize.run()
