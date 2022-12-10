@@ -14,8 +14,11 @@
 仅供个人学习，不得用于牟利，仅供学习参考
 '''
 
+
+import Bilibili_Config    # 运行前检查配置文件
 from apscheduler.schedulers.blocking import BlockingScheduler  # 定时任务框架
-import os
+import json
+import sys
 
 # 参加天选时刻
 def Bilibili_CTime():
@@ -52,27 +55,25 @@ def func(tx_cron, rc_cron, qx_cron, zj_cron):
 
 
 if __name__ == '__main__':
-    config = os.getcwd() + '/Bilibili_config.json'
-    if os.path.exists(config):
-        print("配置文件存在")
+    try:
+        with open('Bilibili_config.json') as f:
+            if len(json.loads(f.read())['Users'][0]['Cookie']) < 1:
+                print('cookie为空或没有设置好，先设置好cookie！')
+                sys.exit()
         # 下面的是cron 表达式，不懂的可以百度搜索 cron 在线生成器，可以有效帮助
         # 分 时 日  ，为了兼容，必须三个数据，且空格分开，不要多个空格
-        tx_cron = '22 17-20 *'  # 天选时刻，每天运行三次，分别12点12分、13点12分、14点12分开始运行，一天最多只能运行四次，超过cookie过期
-        rc_cron = '15 20 *'  # 日常任务，每天运行1次，每天的15点12分开始运行
-        qx_cron = '25 20 *'  # 取消关注，每天运行1次，每天的15点25分开始运行
-        zj_cron = '30 20 *'  # 中奖通知，每天运行1次，每天的15点30分开始运行
+        tx_cron = '22 17-20 *'    # 天选时刻，每天运行三次，分别12点12分、13点12分、14点12分开始运行，一天最多只能运行四次，超过cookie过期
+        rc_cron = '15 20 *'    # 日常任务，每天运行1次，每天的15点12分开始运行
+        qx_cron = '25 20 *'    # 取消关注，每天运行1次，每天的15点25分开始运行
+        zj_cron = '30 20 *'    # 中奖通知，每天运行1次，每天的15点30分开始运行
 
-        if len(tx_cron.split(' ')) == 3 and len(rc_cron.split(' ')) == 3 and len(qx_cron.split(' ')) == 3 and len(zj_cron.split(' ')) == 3:
+        if len(tx_cron.split(' ')) == 3 and len(rc_cron.split(' ')) == 3 and len(qx_cron.split(' ')) == 3 and len(
+                zj_cron.split(' ')) == 3:
             func(tx_cron.split(' '), rc_cron.split(' '), qx_cron.split(' '), zj_cron.split(' '))
         else:
             print('你的cron值错了,请检查！')
-    else:
-        print("配置文件不存在,正在生成配置文件，请修改配置文件再运行")
-        import Bilibili_Config
 
-
-
-
-
+    except Exception as e:
+        print('cookie为空或没有设置好，先设置好cookie！')
 
 
