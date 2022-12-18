@@ -5,20 +5,20 @@ import time
 import datetime
 
 
-# 定义运行时间，24小时制
-timeing = '7' # 设置每天早上7点开始运行，每运行成功一次会延迟几秒运行，理论上：单个账号运行300次便延迟一分钟
+# 定义运行时间 24小时制
+timeing = '8'  # 设置每天早上7点开始运行，每运行成功一次会延迟几秒运行，理论上：单个账号运行300次便延迟一分钟
 # 定义运行过程中网络延迟导致打卡的时间从七点慢慢到八点的时间
 timesub = 0  # 默认是减零，可以看运行日志下次运行的时间决定，账号越多后面减的也应该越多，这是由于程序在运行过程中请求打卡网络的延迟问题造成
 
-# 设置账号 密码
+# 本来是想使用百度地图的接口，只几个人需要就算了
+# 设置账号 密码 密码 经纬度 城市（格式一定要正确）
 array = [
-    ["1767777777", "123456"],
+    ["17677666666", "666666", "109.6200000000000,23.20000000000","中国-广西壮族自治区-贵港市-港北区"],
+    ["账号二", "密码二", "经度,维度","国-省-市-区（县）"],
+    ["账号三", "密码三", "经度,维度","中国-广西壮族自治区-桂林市-永福县"],
+    ["账号四", "密码四", "经度,维度","中国-广东省-佛山市-顺德区"],
+    ["账号五", "密码五", "经度,维度","中国-广西壮族自治区-河池市-都安瑶族自治县"]
 ]
-
-# 东区宿舍 经纬度
-LOCATION = "109.632015,23.239991"
-# 位置，可选通过接口获取
-COORD = "中国-湖北省-武汉市-江夏区"
 
 # API地址
 BASE_URL = "https://xiaobei.yinghuaonline.com/xiaobei-api/"
@@ -36,18 +36,17 @@ HEADERS = {
 }
 
 
-def get_health_param(coord):
+def get_health_param(location, coord):
     # 体温随机为35.8~36.7
     temperature = str(random.randint(358, 367) / 10)
-    # 107.807008,26.245838
+    # 生成随机后四位数
     rand = random.randint(1111, 9999)
-    # 经度
-    location_x = LOCATION.split(',')[0].split(
-        '.')[0] + '.' + LOCATION.split(',')[0].split('.')[1][0:2] + str(rand)
-    # 纬度
-    location_y = LOCATION.split(',')[1].split(
-        '.')[0] + '.' + LOCATION.split(',')[1].split('.')[1][0:2] + str(rand)
+    # 随机经度
+    location_x = location.split(',')[0].split('.')[0] + '.' + location.split(',')[0].split('.')[1][0:2] + str(rand)
+    # 随机纬度
+    location_y = location.split(',')[1].split('.')[0] + '.' + location.split(',')[1].split('.')[1][0:2] + str(rand)
     location = location_x + ',' + location_y
+    print('经纬度：{}, 打卡位置：{}'.format(location, coord))
     return {
         "temperature": temperature,
         "coordinates": coord,
@@ -63,7 +62,7 @@ def get_health_param(coord):
     }
 
 
-def xiaobei_update(username, password):
+def xiaobei_update(username, password, location, coord):
     print("\n"+username+"开始操作")
     flag = False
 
@@ -71,7 +70,6 @@ def xiaobei_update(username, password):
     try:
         print("开始获取验证信息")
         response = requests.get(url=captcha_url, headers=HEADERS)
-
         uuid = response.json()['uuid']
         showCode = response.json()['showCode']
         print("验证信息获取成功")
@@ -88,7 +86,6 @@ def xiaobei_update(username, password):
             "code": showCode,
             "uuid": uuid
         })
-        # print(response)
         print("平台响应："+response.json()['msg'])
     except:
         print("登录失败")
@@ -103,7 +100,7 @@ def xiaobei_update(username, password):
 
             HEADERS['authorization'] = response.json()['token']
             response = requests.post(
-                url=health_url, headers=HEADERS, json=get_health_param(COORD))
+                url=health_url, headers=HEADERS, json=get_health_param(location, coord))
             # print(response)
         except:
             print(username+"打卡失败")
@@ -134,7 +131,7 @@ if __name__ == "__main__":
             while True:
                 # 循环打卡列表
                 for i in array:
-                    if xiaobei_update(i[0], i[1]) == False:
+                    if xiaobei_update(i[0], i[1], i[2],i[3]) == False:
                         failed = failed+1
                         failed_username = failed_username+str(i[0])+",\n"
                     count = count+1
