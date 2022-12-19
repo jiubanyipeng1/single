@@ -9,19 +9,19 @@
 import base64, random, time, datetime
 import requests
 
-
 # 定义星期几运行  星期天到星期六：0-6
 timeweek = '5'
-# 定义当天的运行时间 24小时制（最早早上7点）
+# 定义当天的运行时间 24小时制
 timeing = '7'
+
 # 本来是想使用百度地图的接口，只几个人需要就算了
 # 设置账号 密码 密码 经纬度 城市
 array = [
-    ["17677666666", "666666", "109.6200000000000,23.20000000000","中国-广西壮族自治区-花花市-花花区"],
+    ["17677666666", "666666", "109.6200000000000,23.20000000000","中国-广西壮族自治区-贵港市-港北区"],
     ["账号二", "密码二", "经度,维度","国-省-市-区（县）"],
     ["账号三", "密码三", "经度,维度","中国-广西壮族自治区-桂林市-永福县"],
     ["账号四", "密码四", "经度,维度","中国-广东省-佛山市-顺德区"],
-    ["账号五", "密码五", "经度,维度","中国-广西壮族自治区-河池市-都安瑶族自治县"],
+    ["账号五", "密码五", "经度,维度","中国-广西壮族自治区-河池市-都安瑶族自治县"]
 ]
 # API地址
 BASE_URL = "https://xiaobei.yinghuaonline.com/xiaobei-api/"
@@ -66,7 +66,7 @@ def get_health_param(location, coord):
 
 
 def xiaobei_update(username, password, location, coord):
-    print("\n"+username+"开始操作")
+    print("\n" + username + "开始操作")
     flag = False
 
     # 获取验证信息
@@ -89,36 +89,36 @@ def xiaobei_update(username, password, location, coord):
             "code": showCode,
             "uuid": uuid
         })
-        print("平台响应："+response.json()['msg'])
+        print("平台响应：" + response.json()['msg'])
     except:
         print("登录失败")
         return False
 
     # 检测Http状态
     if response.json()['code'] != 200:
-        print("登陆失败："+response.json()['msg'])
+        print("登陆失败：" + response.json()['msg'])
     else:
         try:
-            print(username+"登陆成功，开始打卡")
+            print(username + "登陆成功，开始打卡")
 
             HEADERS['authorization'] = response.json()['token']
             response = requests.post(
                 url=health_url, headers=HEADERS, json=get_health_param(location, coord))
             # print(response)
         except:
-            print(username+"打卡失败")
+            print(username + "打卡失败")
         HEADERS['authorization'] = ''
 
     # 解析结果
     try:
         if "已经打卡" in response.text:
-            print(username+"🎉今天已经打过卡啦！")
+            print(username + "🎉今天已经打过卡啦！")
             flag = True
         elif response.json()['code'] == 200:
-            print(username+"🎉恭喜您打卡成功啦！")
+            print(username + "🎉恭喜您打卡成功啦！")
             flag = True
         else:
-            print(username+"打卡失败，平台响应：" + response.json())
+            print(username + "打卡失败，平台响应：" + response.json())
     except:
         return False
     return flag
@@ -151,22 +151,31 @@ if __name__ == "__main__":
         print(f'当前星期：{seektime}时间：{hourtime}点 ，设置运行时间为星期：{timeweek}当天： {timeing}点 运行')
 
         if int(seektime) == int(timeweek):
-            if hourtime != int(timeing):
+
+            if hourtime == int(timeing):
+                while True:
+                    clock()
+                    print('程序将在 ' + (datetime.datetime.now() + datetime.timedelta(days=7)).strftime(
+                        "%Y-%m-%d %H:%M:%S") + ' 继续运行\n\n')
+                    time.sleep(60 * 60 * 24 * 7)
+            else:
                 print('当前不在运行时间段，但会默认会运行，之后时间会精确设置运行的时间')
-            while True:
                 clock()
-                print('程序将在 ' + (datetime.datetime.now() + datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S") + ' 继续运行\n\n')  # 第一次显示的时间会不对，之后就应该对了
-                time.sleep(60*60*24*6 + 60*60*(24-hourtime+int(timeing)))  # 七天后继续运行
+                s = 60 * 60 * 24 * 6 + 60 * 60 * (23 - hourtime + int(timeing))
+                print(f'程序将在{s}秒后 继续运行\n\n')  # 第一次显示的时间会不对，之后就应该对了
+                time.sleep(s)
+
         else:
             timsweek = int(timeweek)
             if seektime == 0:  # 如果当前星期天
                 timer = timsweek - seektime
             elif timsweek == 0:  # 如果设置为星期天，不存在两个都为星期天
                 timer = timsweek + 7 - seektime
+
             elif seektime < timsweek:
                 timer = timsweek - seektime
             else:
                 timer = timsweek + 7 - seektime
-            runtime = 60*60*24*(timer-1) + 60*60*(23-hourtime+int(timeing))
+            runtime = 60 * 60 * 24 * (timer - 1) + 60 * 60 * (23 - hourtime + int(timeing))
             print(f'当前不在运行时间段,将在{runtime}秒后继续运行')
             time.sleep(runtime)
