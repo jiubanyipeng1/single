@@ -167,6 +167,6 @@ if __name__ == "__main__":
                 timer = timsweek - seektime
             else:
                 timer = timsweek + 7 - seektime
-            runtime = 60*60*24*(timer-1) + 60*60*(24-hourtime+int(timeing))
+            runtime = 60*60*24*(timer-1) + 60*60*(23-hourtime+int(timeing))
             print(f'当前不在运行时间段,将在{runtime}秒后继续运行')
             time.sleep(runtime)
