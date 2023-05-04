@@ -133,17 +133,8 @@ def get_app_token(login_token):
     app_token = response['token_info']['app_token']
     return app_token
 
-
-# if __name__ == "__main__":
-#     user_list = ['2956098898@qq.com','123456@jiubanyipeng.com']
-#     passwd_list = ['AAaa123456..','AAaa123456..']
-#     min_1 = 2000
-#     max_1 = 3000
-#     for i in range(len(user_list)):
-#         main(user_list[i], passwd_list[i], min_1, max_1)
 if __name__ == "__main__":
-
-    # 定义运行时间 24小时制
+   # 定义运行时间 24小时制
     timeing = '14'  # 设置每天早上6点开始运行
     # 定义运行过程中网络延迟导致打卡的时间从六点慢慢到八点的时间
     timesub = 0  # 默认是减零，可以看运行日志下次运行的时间决定，账号越多后面减的也应该越多，这是由于程序在运行过程中请求打卡网络的延迟问题造成
