@@ -6,8 +6,10 @@
 1. 由于比较匆忙，环境自己看需要引入哪些库。 先在配置文件相关配置，后面运行server，再运行client<br>
 2. 客户端配置文件：client_config.json <br>
 3. 服务端配置文件:server_config.json <br>
-4. 如果你不懂开发环境安装，直接下载集成环境（<a href="https://github.com/jiubanyipeng1/single/releases/tag/2.1" target="_blank">下载地址</a> ）<br>
-
+4. 基本表的数据结构sql：monitor_file_sql.sql <br>
+5. 如果你不懂开发环境安装，直接下载集成环境（<a href="https://github.com/jiubanyipeng1/single/releases/tag/2.1" target="_blank">下载地址</a> ）<br>
+<h1>更新说明：</h1>
+2.1 
 <h1> 配置文件参考说明 </h1>
 <table>
     <caption><h5>server_config文件说明：</h5></caption>
