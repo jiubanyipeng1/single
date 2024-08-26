@@ -1,0 +1,14 @@
+{
+  "server_save_filepath": "H:\\服务器文件",
+  "server_logs_filepath": "logs",
+  "server_host": "0.0.0.0",
+  "server_port":8080,
+  "server_flask_debug": true,
+  "server_thread": 4,
+  "is_user_path": false,
+  "db_host": "127.0.0.1",
+  "db_port": "3306",
+  "db_user": "root",
+  "db_password": "123456",
+  "db_database": "fileupload"
+}
